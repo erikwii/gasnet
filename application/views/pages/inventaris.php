@@ -1,4 +1,4 @@
-<div class="container-fluid app">
+<div class="container app">
 	<div class="row my-3">
         <div class="col-12 col-lg-12 col-md-4">
         	<?php if (isset($_SESSION['error'])): ?>
@@ -36,13 +36,7 @@
 				      <th scope="col">Jenis Aset</th>
 				      <th scope="col">Nama Barang</th>
 				      <th scope="col">No. Inventaris</th>
-				      <th scope="col">Merk/Tipe</th>
-				      <th scope="col">Bahan</th>
-				      <th scope="col">Tahun</th>
-				      <th scope="col">Bulan</th>
-				      <th scope="col">Lokasi</th>
-				      <th scope="col">No. Mesin/Serial Number</th>
-				      <th scope="col">Lihat Foto</th>
+				      <th scope="col">Action</th>
 				    </tr>
 				  </thead>
 				  <tbody>
@@ -53,17 +47,13 @@
 					      <td><?php echo $barang->jenisAset ?></td>
 					      <td><?php echo $barang->namaBarang ?></td>
 					      <td class="text-primary"><?php echo $barang->noInventaris ?></td>
-					      <td><?php echo $barang->merk ?></td>
-					      <td><?php echo $barang->bahan ?></td>
-					      <td><?php echo $barang->tahun ?></td>
-					      <td><?php echo $barang->bulan ?></td>
-					      <td><?php echo $barang->lokasi ?></td>
-					      <td><?php echo $barang->noMesin ?></td>
-					      <?php if ($barang->fileImage != null): ?>
-					      	<td><a href="<?php echo base_url('assets/img/inventaris/').$barang->fileImage ?>" class="btn btn-outline-primary">Lihat Foto</a></td>
-					      <?php else: ?>
-					      	<td>Foto tidak tersedia</td>
-					      <?php endif ?>
+					      <td>
+					      	<div class="btn-group">
+					      		<button class="btn btn-info" onclick="lihat_inventaris(<?php echo $barang->IDinventaris ?>)">Lihat Selengkapnya</button>
+					      		<button class="btn btn-warning" onclick="edit_inventaris(<?php echo $barang->IDinventaris ?>)">Edit</button>
+					      		<button class="btn btn-danger" onclick='swal("Hapus Data!", "apakah anda yakin ingin menghapus data ini?", "error");'>Hapus</button>
+					      	</div>
+					      </td>
 					    </tr>
 				  	<?php endforeach ?>
 				  </tbody>
@@ -76,7 +66,7 @@
 	  	<div class="modal-dialog modal-dialog-centered" role="document">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
-	        		<h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+	        		<h5 class="modal-title" id="exampleModalCenterTitle">Tambah Inventaris</h5>
 	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          			<span aria-hidden="true">&times;</span>
 	        		</button>
@@ -161,7 +151,7 @@
 					    	<div class="input-group mb-3">
 							  	<div class="custom-file">
 							    	<input type="file" name="fileImage" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" onchange="readURL(this)">
-							    	<label id="lable_file" class="custom-file-label" style="overflow: hidden;" for="inputGroupFile01">Upload gambar</label>
+							    	<label id="lable_file" class="custom-file-label" style="overflow: hidden;" for="inputGroupFile01">'klik' di sini untuk Upload gambar</label>
 							  	</div>
 							</div>
 					  	</div>
@@ -171,6 +161,197 @@
 	    	</div>
 	  	</div>
 	</div>
+	<!-- Modal -->
+
+	<!-- Edit Modal -->
+	<div class="modal fade" id="editModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalCenterTitle">Edit Inventaris</h5>
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          			<span aria-hidden="true">&times;</span>
+	        		</button>
+	      		</div>
+	      		<div class="modal-body">
+	      			<?php $attributes = array('class' => 'needs-validation', 'id' => 'form'); ?>
+	      			<?php echo form_open_multipart('home/edit_inventaris', $attributes);?>
+						<div class="form-group d-none">
+							<input type="number" name="IDinventaris">
+						</div>
+					  	<div class="form-row">
+					    	<div class="form-group col-md-6">
+					      		<label for="editkodeBarang">Kode Barang</label>
+					      		<input type="text" class="form-control" id="editkodeBarang" name="editkodeBarang" placeholder="Kode Barang" required>
+					      		<div class="invalid-feedback">Anda harus memasukan kode barang</div>
+					    	</div>
+					    	<div class="form-group col-md-6">
+					      		<label for="editjenisAset">Jenis Aset</label>
+					      		<select id="editjenisAset" name="editjenisAset" class="form-control" required>
+					        		<option selected disabled>Pilih</option>
+					        		<option value="Inventaris bala-bala">Inventaris bala-bala</option>
+					        		<option value="Inventaris Komputer">Inventaris Komputer</option>
+					      		</select>
+					      		<div class="invalid-feedback">Anda harus memilih jenis aset</div>
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="editnamaBarang">Nama Barang</label>
+					    	<input type="text" class="form-control" id="editnamaBarang" name="editnamaBarang" list="barang" required />
+							<datalist id="barang">
+				        		<?php foreach ($item as $i): ?>
+				        			<option value="<?php echo $i->namaBarang?>"><?php echo $i->IDbarang ?></option>
+				        		<?php endforeach ?>
+							</datalist>
+					    	<div class="invalid-feedback">Anda harus memasukan nama barang</div>
+					  	</div>
+					  	<div class="form-row">
+					  		<div class="form-group col-md-6">
+					  			<label for="editmerk">Merk/Tipe</label>
+					    		<input type="text" class="form-control" id="editmerk" name="editmerk" placeholder="Merk Barang" required>
+					    		<div class="invalid-feedback">Anda harus memasukan Merk/Tipe Barang</div>
+					  		</div>
+					  		<div class="form-group col-md-6">
+					  			<label for="editnoMesin">No. Mesin/Serial Number</label>
+					    		<input type="text" class="form-control" id="editnoMesin" name="editnoMesin" placeholder="No. Mesin/Serial number" required>
+					    		<div class="invalid-feedback">Anda harus memasukan No. Mesin/Serial Number</div>
+					  		</div>
+					  	</div>
+					  	<div class="form-group">
+					  		<label for="editlokasi">Lokasi</label>
+					    	<textarea class="form-control" id="editlokasi" name="editlokasi" placeholder="Masukan Lokasi" required></textarea>
+					    	<div class="invalid-feedback">Anda harus menyertakan lokasi</div>
+					  	</div>
+					  	<div class="form-row">
+					    	<div class="form-group col-md-5">
+					      		<label for="editbahan">Bahan</label>
+					      		<input type="text" class="form-control" id="editbahan" name="editbahan" placeholder="Bahan" required>
+					      		<div class="invalid-feedback">Anda harus menyertakan bahan</div>
+					    	</div>
+					    	<div class="form-group col-md-4">
+					      		<label for="editbulan">Bulan</label>
+					      		<select id="editbulan" name="editbulan" class="form-control" required>
+					        		<option selected disabled>Pilih</option>
+					        		<option value="1">Januari</option>
+					        		<option value="2">Februari</option>
+					        		<option value="3">Maret</option>
+					        		<option value="4">April</option>
+					        		<option value="5">Mei</option>
+					        		<option value="6">Juni</option>
+					        		<option value="7">Juli</option>
+					        		<option value="8">Agustus</option>
+					        		<option value="9">September</option>
+					        		<option value="10">Oktober</option>
+					        		<option value="11">November</option>
+					        		<option value="12">Desember</option>
+					      		</select>
+					      		<div class="invalid-feedback">Anda harus memilih bulan</div>
+					    	</div>
+					    	<div class="form-group col-md-3">
+					      		<label for="edittahun">Tahun</label>
+					      		<input type="number" class="form-control" id="edittahun" name="edittahun" value="<?php echo date('Y') ?>" required>
+					      		<div class="invalid-feedback">Anda harus memasukan tahun</div>
+					    	</div>
+					    	<div id="editBlah" class="col-md-12 my-2" style="height: 10px;"></div>
+					    	<div class="input-group mb-3">
+							  	<div class="custom-file">
+							    	<input type="file" name="editfileImage" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" onchange="readURLedit(this)">
+							    	<label id="lable_file" class="custom-file-label" style="overflow: hidden;" for="inputGroupFile01">'klik' di sini untuk Upload gambar</label>
+							  	</div>
+							</div>
+					  	</div>
+					  	<button type="submit" class="btn btn-primary">Edit</button>
+					</form>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	<!-- Edit Modal -->
+
+	<!-- Lihat Modal -->
+	<div class="modal fade" id="lihatModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	  	<div class="modal-dialog modal-dialog-centered" role="document">
+	    	<div class="modal-content">
+	      		<div class="modal-header">
+	        		<h5 class="modal-title" id="exampleModalCenterTitle">Data Inventaris</h5>
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          			<span aria-hidden="true">&times;</span>
+	        		</button>
+	      		</div>
+	      		<div class="modal-body">
+	      			<form id="lihatform">
+					  	<div class="form-row">
+					    	<div class="form-group col-md-6">
+					      		<label for="lihatkodeBarang">Kode Barang</label>
+					      		<input type="text" class="form-control" id="lihatkodeBarang" name="lihatkodeBarang" placeholder="Kode Barang" readonly>
+					    	</div>
+					    	<div class="form-group col-md-6">
+					      		<label for="lihatjenisAset">Jenis Aset</label>
+					      		<select id="lihatjenisAset" name="lihatjenisAset" class="form-control" readonly>
+					        		<option selected disabled>Pilih</option>
+					        		<option value="Inventaris bala-bala">Inventaris bala-bala</option>
+					        		<option value="Inventaris Komputer">Inventaris Komputer</option>
+					      		</select>
+					    	</div>
+					  	</div>
+					  	<div class="form-group">
+					    	<label for="lihatnamaBarang">Nama Barang</label>
+					    	<input type="text" class="form-control" id="lihatnamaBarang" name="lihatnamaBarang" list="barang" readonly />
+							<datalist id="barang">
+				        		<?php foreach ($item as $i): ?>
+				        			<option value="<?php echo $i->namaBarang?>"><?php echo $i->IDbarang ?></option>
+				        		<?php endforeach ?>	
+							</datalist>
+					  	</div>
+					  	<div class="form-row">
+					  		<div class="form-group col-md-6">
+					  			<label for="lihatmerk">Merk/Tipe</label>
+					    		<input type="text" class="form-control" id="lihatmerk" name="lihatmerk" placeholder="Merk Barang" readonly>
+					  		</div>
+					  		<div class="form-group col-md-6">
+					  			<label for="lihatnoMesin">No. Mesin/Serial Number</label>
+					    		<input type="text" class="form-control" id="lihatnoMesin" name="lihatnoMesin" placeholder="No. Mesin/Serial number" readonly>
+					  		</div>
+					  	</div>
+					  	<div class="form-group">
+					  		<label for="lihatlokasi">Lokasi</label>
+					    	<textarea class="form-control" id="lihatlokasi" name="lihatlokasi" placeholder="Masukan Lokasi" readonly></textarea>
+					  	</div>
+					  	<div class="form-row">
+					    	<div class="form-group col-md-5">
+					      		<label for="lihatbahan">Bahan</label>
+					      		<input type="text" class="form-control" id="lihatbahan" name="lihatbahan" placeholder="Bahan" readonly>
+					    	</div>
+					    	<div class="form-group col-md-4">
+					      		<label for="lihatbulan">Bulan</label>
+					      		<select id="lihatbulan" name="lihatbulan" class="form-control" readonly>
+					        		<option selected disabled>Pilih</option>
+					        		<option value="1">Januari</option>
+					        		<option value="2">Februari</option>
+					        		<option value="3">Maret</option>
+					        		<option value="4">April</option>
+					        		<option value="5">Mei</option>
+					        		<option value="6">Juni</option>
+					        		<option value="7">Juli</option>
+					        		<option value="8">Agustus</option>
+					        		<option value="9">September</option>
+					        		<option value="10">Oktober</option>
+					        		<option value="11">November</option>
+					        		<option value="12">Desember</option>
+					      		</select>
+					    	</div>
+					    	<div class="form-group col-md-3">
+					      		<label for="lihattahun">Tahun</label>
+					      		<input type="number" class="form-control" id="lihattahun" name="lihattahun" value="<?php echo date('Y') ?>" readonly>
+					    	</div>
+					    	<div id="foto" class="col-md-12 my-2" style="height: 10px;"></div>
+					  	</div>
+					</form>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	<!-- Lihat Modal -->
 </div>
 <script>
 	function readURL(input) {
@@ -190,6 +371,118 @@
 
             reader.readAsDataURL(input.files[0]);
         }
+    }
+
+    function readURLedit(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#editBlah')
+                    .css('background-image', 'url(' + e.target.result + ')')
+                    .css('background-size', 'contain, cover')
+                    .css('background-repeat', 'no-repeat')
+                    .width(150)
+                    .height(200);
+                $('#lable_file')
+                	.text('Gambar dipilih');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function edit_inventaris(id){
+        $('#form')[0].reset();
+
+        $.ajax({
+            url : "<?php echo site_url('home/data_inventaris/')?>/" + id,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data)
+            {
+
+                $('[name="IDinventaris"]').val(data[0].IDinventaris);
+                $('[name="editkodeBarang"]').val(data[0].kodeBarang);
+                $('[name="editjenisAset"]').val(data[0].jenisAset);
+                $('[name="editnamaBarang"]').val(data[0].namaBarang);
+                $('[name="editmerk"]').val(data[0].merk);
+                $('[name="editnoMesin"]').val(data[0].noMesin);
+                $('[name="editlokasi"]').val(data[0].lokasi);
+                $('[name="editbahan"]').val(data[0].bahan);
+                $('[name="editbulan"]').val(data[0].bulan);
+                $('[name="edittahun"]').val(data[0].tahun);
+                if (data[0].fileImage != null) {
+                	$('#editBlah')
+	                	.css('background-image', 'url(<?php echo base_url('assets/img/inventaris/') ?>' + data[0].fileImage + ')')
+	                    .css('background-size', 'contain, cover')
+	                    .css('background-repeat', 'no-repeat')
+	                    .width(150)
+	                    .height(200);
+                }
+
+                $('#editModalCenter').modal('show');
+
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log('failed get data');
+            }
+        });
+    }
+
+    function lihat_inventaris(id){
+        $('#lihatform')[0].reset();
+
+        $.ajax({
+            url : "<?php echo site_url('home/data_inventaris/')?>/" + id,
+            type: "GET",
+            dataType: "JSON",
+            success: function(data)
+            {
+                $('[name="lihatkodeBarang"]').val(data[0].kodeBarang);
+                $('[name="lihatjenisAset"]').val(data[0].jenisAset);
+                $('[name="lihatnamaBarang"]').val(data[0].namaBarang);
+                $('[name="lihatmerk"]').val(data[0].merk);
+                $('[name="lihatnoMesin"]').val(data[0].noMesin);
+                $('[name="lihatlokasi"]').val(data[0].lokasi);
+                $('[name="lihatbahan"]').val(data[0].bahan);
+                $('[name="lihatbulan"]').val(data[0].bulan);
+                $('[name="lihattahun"]').val(data[0].tahun);
+                if (data[0].fileImage != null) {
+                	$('#foto')
+	                	.css('background-image', 'url(<?php echo base_url('assets/img/inventaris/') ?>' + data[0].fileImage + ')')
+	                    .css('background-size', 'contain, cover')
+	                    .css('background-repeat', 'no-repeat')
+	                    .width(150)
+	                    .height(200);
+                }
+
+                $('#lihatModalCenter').modal('show');
+
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+                console.log('failed get data');
+            }
+        });
+    }
+
+    function hapus_inventaris(id) {
+    	swal({
+		  	title: "Apa Anda Yakin?",
+		  	text: "Saat menghapusnya Anda tidak akan mengembalikannya seperti semula!",
+		  	icon: "warning",
+		  	buttons: true,
+		  	dangerMode: true,
+		})
+		.then((willDelete) => {
+		  	if (willDelete) {
+		    	window.location('<?php echo base_url() ?>/home/hapus_inventaris/'+id);
+		  	} else {
+		    	swal("Your imaginary file is safe!");
+		  	}
+		});
     }
 
 	// Example starter JavaScript for disabling form submissions if there are invalid fields
@@ -223,6 +516,7 @@
 				lengthMenu: [[5, 10, 25, 50, -1], ["5 Rows","10 Rows", "25 Rows", "50 Rows", "All"]],
 				order: [[0, "asc"]],
 				searching: true,
+				select: true,
 				buttons: [
 		            {
 		                extend: 'excelHtml5',

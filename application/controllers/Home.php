@@ -16,6 +16,10 @@ class Home extends CI_Controller {
 
 	public function index()
 	{
+		if (isset($_SESSION['email']) && isset($_SESSION['password'])) {
+			redirect(base_url()."home/inventaris/");
+		}
+
 		$data = array(
             'title'=> 'Gasnet - Login',
             'nav' => 'nav.php',
@@ -30,9 +34,6 @@ class Home extends CI_Controller {
 		if (!isset($_SESSION['email']) || !isset($_SESSION['password'])) {
 			$_SESSION['login_error'] = 'Anda belum melakukan login';
 			redirect(base_url());
-		}else{
-			$_SESSION['login_error'] = $_SESSION['email']." | ".$_SESSION['password'];
-			redirect(base_url());
 		}
 
 		$data = array(
@@ -44,6 +45,12 @@ class Home extends CI_Controller {
             'item' => $this->home_model->get_barang()
         );
         $this->load->view('layout/wrapper',$data);
+	}
+
+	public function data_inventaris($IDinventaris)
+	{
+		$data = $this->home_model->get_inventaris($IDinventaris);
+		echo json_encode($data);
 	}
 
 	public function tambah_inventaris()
@@ -119,25 +126,13 @@ class Home extends CI_Controller {
 		redirect(base_url().'/home/inventaris');
 	}
 
-	public function uploadFoto($folder,$input_name)
-	{
-		$config['upload_path']          = 'assets/img/'.$folder.'/';
-		$config['allowed_types']        = 'gif|jpg|png';
-		$config['max_size']             = 0;
-		$config['max_width']            = 0;
-		$config['max_height']           = 0;
+	public function hapus_inventaris($id)
+	{	
+		$file = $this->home_model->get_inventaris($id)['fileImage'];
+		unlink(FCPATH.'assets/img/inventaris/'.$file);
+		$this->db->delete('inventaris', array('IDinventaris' => $id));
 
-		$this->load->library('upload', $config);
-
-		if ( ! $this->upload->do_upload($input_name)){
-			$error = array('error' => $this->upload->display_errors());
-			$_SESSION['error'] = $error['error'];
-			return ['failed', $error['error']];
-		}else{
-			$data = array('upload_data' => $this->upload->data());
-			$_SESSION['success'] = 'Pengumuman berhasil di-upload :)';
-			return ['success', $this->upload->data()['file_name']];
-		}
+		$_SESSION['success'] = 'Anda berhasil menghapus data inventaris!';
 	}
 
 	public function login(){
