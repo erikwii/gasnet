@@ -93,6 +93,7 @@ class Home extends CI_Controller {
 
 			if ( ! $this->upload->do_upload('fileImage')){
 				$error = array('error' => $this->upload->display_errors());
+				$_SESSION['error'] = 'Gagal upload foto : '.$error['error'];
 			}else{
 				$data = array('upload_data' => $this->upload->data());
 				$_SESSION['success'] = 'Pengumuman berhasil di-upload :)';
@@ -143,7 +144,7 @@ class Home extends CI_Controller {
 		$bahan = $this->input->post('editbahan');
 		$bulan = $this->input->post('editbulan');
 		$tahun = $this->input->post('edittahun');
-		$fileImage = $this->input->post('editfileImage');
+		$fileImage = $this->input->post('namaFile');
 
 		// check if barang is not exist on table barang
 		$check = $this->home_model->get_barang_where(array('namaBarang'=>$namaBarang));
@@ -154,31 +155,25 @@ class Home extends CI_Controller {
 			$IDbarang = $check['IDbarang'];
 		}
 		
-		$fileImageName = [null, null];
+		$fileImageName = array(null, null);
 
-		if ($fileImage == null) {
-			$config['upload_path']          = 'assets/img/inventaris/';
-			$config['allowed_types']        = 'gif|jpg|png';
-			$config['max_size']             = 0;
-			$config['max_width']            = 0;
-			$config['max_height']           = 0;
+		$config['upload_path']          = 'assets/img/inventaris/';
+		$config['allowed_types']        = 'gif|jpg|png';
+		$config['max_size']             = 0;
+		$config['max_width']            = 0;
+		$config['max_height']           = 0;
 
-			$this->load->library('upload', $config);
+		$this->load->library('upload', $config);
 
-			if ( ! $this->upload->do_upload('editfileImage')){
-				$error = array('error' => $this->upload->display_errors());
-			}else{
-				$data = array('upload_data' => $this->upload->data());
-				$_SESSION['success'] = 'Pengumuman berhasil di-upload :)';
-				$fileImageName = ['success', $this->upload->data()['file_name']];
-			}
+		if ( ! $this->upload->do_upload('editfileImage')){
+			$error = array('error' => $this->upload->display_errors());			
 		}else{
-			$_SESSION['error'] = 'file tidak ada';
-			redirect(base_url()."home/inventaris");
+			$data = array('upload_data' => $this->upload->data());
+			$fileImageName = array('success', $this->upload->data()['file_name']);
 		}
 
 		if ($fileImageName[1] == null) {
-			$fileImageName = ['success', $this->home_model->get_inventaris($IDinventaris)['fileImage']];
+			$fileImageName = array('success', $fileImage);
 		}
 
 		$data = array(
@@ -198,7 +193,7 @@ class Home extends CI_Controller {
 		$this->db->where('IDinventaris', $IDinventaris);
 		$this->db->update('inventaris');
 
-		$_SESSION['success'] = 'Inventaris berhasil ditambahkan :)';
+		$_SESSION['success'] = 'Inventaris berhasil diupdate :)';
 		redirect(base_url().'/home/inventaris');
 	}
 

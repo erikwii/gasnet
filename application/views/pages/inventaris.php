@@ -269,6 +269,7 @@
 							  	<div class="custom-file">
 							    	<input type="file" name="editfileImage" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" onchange="readURLedit(this)">
 							    	<label id="editlable_file" class="custom-file-label" style="overflow: hidden;" for="inputGroupFile01">'klik' di sini untuk Upload gambar</label>
+							    	<input type="text" name="namaFile" class="d-none">
 							  	</div>
 							</div>
 					  	</div>
@@ -424,6 +425,7 @@
                 $('[name="editbahan"]').val(data[0].bahan);
                 $('[name="editbulan"]').val(data[0].bulan);
                 $('[name="edittahun"]').val(data[0].tahun);
+                $('[name="namaFile"]').val(data[0].fileImage);
                 if (data[0].fileImage != null) {
                 	$('#editBlah')
 	                	.css('background-image', 'url(<?php echo base_url('assets/img/inventaris/') ?>' + data[0].fileImage + ')')
