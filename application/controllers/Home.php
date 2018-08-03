@@ -126,6 +126,82 @@ class Home extends CI_Controller {
 		redirect(base_url().'/home/inventaris');
 	}
 
+	public function edit_inventaris()
+	{
+		if (!isset($_SESSION['email']) || !isset($_SESSION['password'])) {
+			$_SESSION['login_error'] = 'Anda belum melakukan login';
+			redirect(base_url());
+		}
+
+		$IDinventaris = $this->input->post('IDinventaris');
+		$kodeBarang = $this->input->post('editkodeBarang');
+		$jenisAset = $this->input->post('editjenisAset');
+		$namaBarang = $this->input->post('editnamaBarang');
+		$merk = $this->input->post('editmerk');
+		$noMesin = $this->input->post('editnoMesin');
+		$lokasi = $this->input->post('editlokasi');
+		$bahan = $this->input->post('editbahan');
+		$bulan = $this->input->post('editbulan');
+		$tahun = $this->input->post('edittahun');
+		$fileImage = $this->input->post('editfileImage');
+
+		// check if barang is not exist on table barang
+		$check = $this->home_model->get_barang_where(array('namaBarang'=>$namaBarang));
+		if ($check == false) {
+			$this->db->insert('barang', array('namaBarang' => $namaBarang));
+			$IDbarang = $this->home_model->get_barang_where(array('namaBarang'=>$namaBarang))['IDbarang'];
+		} else {
+			$IDbarang = $check['IDbarang'];
+		}
+		
+		$fileImageName = [null, null];
+
+		if ($fileImage == null) {
+			$config['upload_path']          = 'assets/img/inventaris/';
+			$config['allowed_types']        = 'gif|jpg|png';
+			$config['max_size']             = 0;
+			$config['max_width']            = 0;
+			$config['max_height']           = 0;
+
+			$this->load->library('upload', $config);
+
+			if ( ! $this->upload->do_upload('editfileImage')){
+				$error = array('error' => $this->upload->display_errors());
+			}else{
+				$data = array('upload_data' => $this->upload->data());
+				$_SESSION['success'] = 'Pengumuman berhasil di-upload :)';
+				$fileImageName = ['success', $this->upload->data()['file_name']];
+			}
+		}else{
+			$_SESSION['error'] = 'file tidak ada';
+			redirect(base_url()."home/inventaris");
+		}
+
+		if ($fileImageName[1] == null) {
+			$fileImageName = ['success', $this->home_model->get_inventaris($IDinventaris)['fileImage']];
+		}
+
+		$data = array(
+			'kodeBarang' => $kodeBarang,
+			'jenisAset' => $jenisAset,
+			'IDbarang' => $IDbarang,
+			'merk' => $merk,
+			'noMesin' => $noMesin,
+			'lokasi' => $lokasi,
+			'bahan' => $bahan,
+			'bulan' => $bulan,
+			'tahun' => $tahun,
+			'noInventaris' => $kodeBarang.'/'.$IDinventaris.'/'.$this->bulan_to_romawi($bulan).'/'.$tahun,
+			'fileImage' => $fileImageName[1]
+		);
+		$this->db->set($data);
+		$this->db->where('IDinventaris', $IDinventaris);
+		$this->db->update('inventaris');
+
+		$_SESSION['success'] = 'Inventaris berhasil ditambahkan :)';
+		redirect(base_url().'/home/inventaris');
+	}
+
 	public function hapus_inventaris($id)
 	{	
 		$file = $this->home_model->get_inventaris($id)['fileImage'];
@@ -133,6 +209,7 @@ class Home extends CI_Controller {
 		$this->db->delete('inventaris', array('IDinventaris' => $id));
 
 		$_SESSION['success'] = 'Anda berhasil menghapus data inventaris!';
+		redirect(base_url());
 	}
 
 	public function login(){

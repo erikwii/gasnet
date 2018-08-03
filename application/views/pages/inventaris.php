@@ -36,6 +36,12 @@
 				      <th scope="col">Jenis Aset</th>
 				      <th scope="col">Nama Barang</th>
 				      <th scope="col">No. Inventaris</th>
+				      <th scope="col">Merk/Tipe</th>
+				      <th scope="col">No. Mesin/Serial Number</th>
+				      <th scope="col">Lokasi</th>
+				      <th scope="col">Bahan</th>
+				      <th scope="col">Bulan</th>
+				      <th scope="col">Tahun</th>
 				      <th scope="col">Action</th>
 				    </tr>
 				  </thead>
@@ -47,11 +53,17 @@
 					      <td><?php echo $barang->jenisAset ?></td>
 					      <td><?php echo $barang->namaBarang ?></td>
 					      <td class="text-primary"><?php echo $barang->noInventaris ?></td>
+					      <td><?php echo $barang->merk ?></td>
+					      <td><?php echo $barang->noMesin ?></td>
+					      <td><?php echo $barang->lokasi ?></td>
+					      <td><?php echo $barang->bahan ?></td>
+					      <td><?php echo $barang->bulan ?></td>
+					      <td><?php echo $barang->tahun ?></td>
 					      <td>
 					      	<div class="btn-group">
 					      		<button class="btn btn-info" onclick="lihat_inventaris(<?php echo $barang->IDinventaris ?>)">Lihat Selengkapnya</button>
 					      		<button class="btn btn-warning" onclick="edit_inventaris(<?php echo $barang->IDinventaris ?>)">Edit</button>
-					      		<button class="btn btn-danger" onclick='swal("Hapus Data!", "apakah anda yakin ingin menghapus data ini?", "error");'>Hapus</button>
+					      		<button class="btn btn-danger" onclick='hapus_inventaris(<?php echo $barang->IDinventaris ?>)'>Hapus</button>
 					      	</div>
 					      </td>
 					    </tr>
@@ -256,7 +268,7 @@
 					    	<div class="input-group mb-3">
 							  	<div class="custom-file">
 							    	<input type="file" name="editfileImage" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" onchange="readURLedit(this)">
-							    	<label id="lable_file" class="custom-file-label" style="overflow: hidden;" for="inputGroupFile01">'klik' di sini untuk Upload gambar</label>
+							    	<label id="editlable_file" class="custom-file-label" style="overflow: hidden;" for="inputGroupFile01">'klik' di sini untuk Upload gambar</label>
 							  	</div>
 							</div>
 					  	</div>
@@ -384,7 +396,7 @@
                     .css('background-repeat', 'no-repeat')
                     .width(150)
                     .height(200);
-                $('#lable_file')
+                $('#editlable_file')
                 	.text('Gambar dipilih');
             };
 
@@ -471,14 +483,14 @@
     function hapus_inventaris(id) {
     	swal({
 		  	title: "Apa Anda Yakin?",
-		  	text: "Saat menghapusnya Anda tidak akan mengembalikannya seperti semula!",
+		  	text: "Saat menghapusnya Anda tidak akan bisa mengembalikannya seperti semula!",
 		  	icon: "warning",
 		  	buttons: true,
 		  	dangerMode: true,
 		})
 		.then((willDelete) => {
 		  	if (willDelete) {
-		    	window.location('<?php echo base_url() ?>/home/hapus_inventaris/'+id);
+		    	window.location = '<?php echo base_url() ?>home/hapus_inventaris/'+id;
 		  	} else {
 		    	swal("Your imaginary file is safe!");
 		  	}
@@ -515,13 +527,37 @@
 				oLanguage: {sLengthMenu: "_MENU_"},
 				lengthMenu: [[5, 10, 25, 50, -1], ["5 Rows","10 Rows", "25 Rows", "50 Rows", "All"]],
 				order: [[0, "asc"]],
-				searching: true,
-				select: true,
+				"columnDefs": [
+		            {
+		                "targets": [ 5 ],
+		                "visible": false
+		            },
+		            {
+		                "targets": [ 6 ],
+		                "visible": false
+		            },
+		            {
+		                "targets": [ 7 ],
+		                "visible": false
+		            },
+		            {
+		                "targets": [ 8 ],
+		                "visible": false
+		            },
+		            {
+		                "targets": [ 9 ],
+		                "visible": false
+		            },
+		            {
+		                "targets": [ 10 ],
+		                "visible": false
+		            }
+		        ],
 				buttons: [
 		            {
 		                extend: 'excelHtml5',
 		                exportOptions: {
-		                    columns: [0,1,2,3,4,5,6,7,8,9]
+		                    columns: [0,1,2,3,5,4,6,7,8,9,10]
 		                }
 		            }
 		        ]
