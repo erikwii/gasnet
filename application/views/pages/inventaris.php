@@ -1,6 +1,6 @@
 <div class="container app">
 	<div class="row my-3">
-        <div class="col-12 col-lg-12 col-md-4">
+        <div class="col-12 col-lg-12 col-md-12">
         	<?php if (isset($_SESSION['error'])): ?>
         		<div class="alert alert-danger alert-dismissible fade show" role="alert">
 				  <?php echo $_SESSION['error'] ?>
@@ -28,7 +28,7 @@
         		</form>
         	</div> -->
         	<div class="table-responsive">
-        		<table class="table table-striped" id="inventaris_table">
+        		<table class="table table-striped w-100" id="inventaris_table">
 				  <thead>
 				    <tr>
 				      <th scope="col">No</th>
@@ -36,6 +36,7 @@
 				      <th scope="col">Jenis Aset</th>
 				      <th scope="col">Nama Barang</th>
 				      <th scope="col">No. Inventaris</th>
+				      <th scope="col">Harga</th>
 				      <th scope="col">Merk/Tipe</th>
 				      <th scope="col">No. Mesin/Serial Number</th>
 				      <th scope="col">Lokasi</th>
@@ -46,13 +47,15 @@
 				    </tr>
 				  </thead>
 				  <tbody>
+				  	<?php $i=1; ?>
 				  	<?php foreach ($inventaris as $barang): ?>
 				  		<tr>
-					      <th scope="row"><?php echo $barang->IDinventaris ?></th>
+					      <th scope="row"><?php echo $i ?></th>
 					      <td><?php echo $barang->kodeBarang ?></td>
 					      <td><?php echo $barang->jenisAset ?></td>
 					      <td><?php echo $barang->namaBarang ?></td>
 					      <td class="text-primary"><?php echo $barang->noInventaris ?></td>
+					      <td><?php echo $barang->harga ?></td>
 					      <td><?php echo $barang->merk ?></td>
 					      <td><?php echo $barang->noMesin ?></td>
 					      <td><?php echo $barang->lokasi ?></td>
@@ -67,6 +70,7 @@
 					      	</div>
 					      </td>
 					    </tr>
+					    <?php $i++ ?>
 				  	<?php endforeach ?>
 				  </tbody>
 				</table>
@@ -87,30 +91,41 @@
 	      			<?php $attributes = array('class' => 'needs-validation'); ?>
 	      			<?php echo form_open_multipart('home/tambah_inventaris', $attributes);?>
 					  	<div class="form-row">
-					    	<div class="form-group col-md-6">
+					    	<div class="form-group col-md-4">
 					      		<label for="kodeBarang">Kode Barang</label>
 					      		<input type="text" class="form-control" id="kodeBarang" name="kodeBarang" placeholder="Kode Barang" required>
 					      		<div class="invalid-feedback">Anda harus memasukan kode barang</div>
 					    	</div>
-					    	<div class="form-group col-md-6">
-					      		<label for="inputState">Jenis Aset</label>
-					      		<select id="inputState" name="jenisAset" class="form-control" required>
-					        		<option selected disabled>Pilih</option>
-					        		<option value="Inventaris bala-bala">Inventaris bala-bala</option>
-					        		<option value="Inventaris Komputer">Inventaris Komputer</option>
-					      		</select>
+					    	<div class="form-group col-md-8">
+					      		<label for="jenisAset">Jenis Aset</label>
+					      		<input type="text" id="jenisAset" name="jenisAset" class="form-control" required list="aset">
+					      		<datalist id="aset">
+					      			<option value="Peralatan Penunjang Operasi">Peralatan Penunjang Operasi</option>
+					      			<option value="Komputer">Komputer</option>
+					      			<option value="Bahan Logam">Bahan Kayu</option>
+					      			<option value="Bahan Logam">Bahan Logam</option>
+					      			<option value="Alat-alat Lainnya">Alat-Alat Lainnya</option>
+					      		</datalist>
 					      		<div class="invalid-feedback">Anda harus memilih jenis aset</div>
 					    	</div>
 					  	</div>
-					  	<div class="form-group">
-					    	<label for="inputAddress">Nama Barang</label>
-					    	<input type="text" class="form-control" id="IDbarang" name="IDbarang" list="barang" required />
-							<datalist id="barang">
-				        		<?php foreach ($item as $i): ?>
-				        			<option value="<?php echo $i->namaBarang?>"><?php echo $i->IDbarang ?></option>
-				        		<?php endforeach ?>
-							</datalist>
-					    	<div class="invalid-feedback">Anda harus memasukan nama barang</div>
+					  	<div class="form-row">
+					  		<div class="form-group col-md-7">
+						    	<label for="inputAddress">Nama Barang</label>
+						    	<input type="text" class="form-control" id="IDbarang" name="IDbarang" list="barang" placeholder="Nama barang" required />
+						    	<?php $namaBarang = $this->home_model->get_inventaris_column('namaBarang') ?>
+								<datalist id="barang">
+					        		<?php foreach ($namaBarang as $n): ?>
+					        			<option value="<?php echo $n->namaBarang?>"><?php echo $n->namaBarang ?></option>
+					        		<?php endforeach ?>
+								</datalist>
+						    	<div class="invalid-feedback">Anda harus memasukan nama barang</div>
+						  	</div>
+						  	<div class="form-group col-md-5">
+						    	<label for="harga">Harga</label>
+						    	<input type="number" class="form-control" id="harga" name="hargaBarang" placeholder="Rp." required />
+						    	<div class="invalid-feedback">Anda harus memasukan harga barang</div>
+						  	</div>
 					  	</div>
 					  	<div class="form-row">
 					  		<div class="form-group col-md-6">
@@ -138,7 +153,7 @@
 					    	<div class="form-group col-md-4">
 					      		<label for="inputState">Bulan</label>
 					      		<select id="inputState" name="bulan" class="form-control" required>
-					        		<option selected disabled>Pilih</option>
+					        		<option selected disabled value="-">Pilih</option>
 					        		<option value="1">Januari</option>
 					        		<option value="2">Februari</option>
 					        		<option value="3">Maret</option>
@@ -192,30 +207,40 @@
 							<input type="number" name="IDinventaris">
 						</div>
 					  	<div class="form-row">
-					    	<div class="form-group col-md-6">
+					    	<div class="form-group col-md-4">
 					      		<label for="editkodeBarang">Kode Barang</label>
 					      		<input type="text" class="form-control" id="editkodeBarang" name="editkodeBarang" placeholder="Kode Barang" required>
 					      		<div class="invalid-feedback">Anda harus memasukan kode barang</div>
 					    	</div>
-					    	<div class="form-group col-md-6">
+					    	<div class="form-group col-md-8">
 					      		<label for="editjenisAset">Jenis Aset</label>
-					      		<select id="editjenisAset" name="editjenisAset" class="form-control" required>
-					        		<option selected disabled>Pilih</option>
-					        		<option value="Inventaris bala-bala">Inventaris bala-bala</option>
-					        		<option value="Inventaris Komputer">Inventaris Komputer</option>
-					      		</select>
+					      		<input type="text" id="editjenisAset" name="editjenisAset" class="form-control" required list="aset">
+					      		<datalist id="editaset">
+					      			<option value="Peralatan Penunjang Operasi">Peralatan Penunjang Operasi</option>
+					      			<option value="Komputer">Komputer</option>
+					      			<option value="Bahan Logam">Bahan Kayu</option>
+					      			<option value="Bahan Logam">Bahan Logam</option>
+					      			<option value="Alat-alat Lainnya">Alat-Alat Lainnya</option>
+					      		</datalist>
 					      		<div class="invalid-feedback">Anda harus memilih jenis aset</div>
 					    	</div>
 					  	</div>
-					  	<div class="form-group">
-					    	<label for="editnamaBarang">Nama Barang</label>
-					    	<input type="text" class="form-control" id="editnamaBarang" name="editnamaBarang" list="barang" required />
-							<datalist id="barang">
-				        		<?php foreach ($item as $i): ?>
-				        			<option value="<?php echo $i->namaBarang?>"><?php echo $i->IDbarang ?></option>
-				        		<?php endforeach ?>
-							</datalist>
-					    	<div class="invalid-feedback">Anda harus memasukan nama barang</div>
+					  	<div class="form-row">
+					  		<div class="form-group col-md-7">
+						    	<label for="editnamaBarang">Nama Barang</label>
+						    	<input type="text" class="form-control" id="editnamaBarang" name="editnamaBarang" list="barang" required />
+								<datalist id="barang">
+					        		<?php foreach ($namaBarang as $n): ?>
+					        			<option value="<?php echo $n->namaBarang?>"><?php echo $n->namaBarang ?></option>
+					        		<?php endforeach ?>
+								</datalist>
+						    	<div class="invalid-feedback">Anda harus memasukan nama barang</div>
+						  	</div>
+						  	<div class="form-group col-md-5">
+						    	<label for="editharga">Harga</label>
+						    	<input type="number" class="form-control" id="editharga" name="edithargBarang" placeholder="Rp." required />
+						    	<div class="invalid-feedback">Anda harus memasukan harga barang</div>
+						  	</div>
 					  	</div>
 					  	<div class="form-row">
 					  		<div class="form-group col-md-6">
@@ -242,8 +267,8 @@
 					    	</div>
 					    	<div class="form-group col-md-4">
 					      		<label for="editbulan">Bulan</label>
-					      		<select id="editbulan" name="editbulan" class="form-control" required>
-					        		<option selected disabled>Pilih</option>
+					      		<select id="editbulan" name="editbulan" class="form-control">
+					        		<option selected disabled value="-">Pilih</option>
 					        		<option value="1">Januari</option>
 					        		<option value="2">Februari</option>
 					        		<option value="3">Maret</option>
@@ -294,27 +319,37 @@
 	      		<div class="modal-body">
 	      			<form id="lihatform">
 					  	<div class="form-row">
-					    	<div class="form-group col-md-6">
+					    	<div class="form-group col-md-4">
 					      		<label for="lihatkodeBarang">Kode Barang</label>
 					      		<input type="text" class="form-control" id="lihatkodeBarang" name="lihatkodeBarang" placeholder="Kode Barang" readonly>
 					    	</div>
-					    	<div class="form-group col-md-6">
+					    	<div class="form-group col-md-8">
 					      		<label for="lihatjenisAset">Jenis Aset</label>
-					      		<select id="lihatjenisAset" name="lihatjenisAset" class="form-control" readonly>
-					        		<option selected disabled>Pilih</option>
-					        		<option value="Inventaris bala-bala">Inventaris bala-bala</option>
-					        		<option value="Inventaris Komputer">Inventaris Komputer</option>
-					      		</select>
+					      		<input type="text" id="lihatjenisAset" name="lihatjenisAset" class="form-control" readonly="" list="lihataset">
+					      		<datalist id="lihataset">
+					      			<option value="Peralatan Penunjang Operasi">Peralatan Penunjang Operasi</option>
+					      			<option value="Komputer">Komputer</option>
+					      			<option value="Bahan Logam">Bahan Kayu</option>
+					      			<option value="Bahan Logam">Bahan Logam</option>
+					      			<option value="Alat-alat Lainnya">Alat-Alat Lainnya</option>
+					      		</datalist>
 					    	</div>
 					  	</div>
-					  	<div class="form-group">
-					    	<label for="lihatnamaBarang">Nama Barang</label>
-					    	<input type="text" class="form-control" id="lihatnamaBarang" name="lihatnamaBarang" list="barang" readonly />
-							<datalist id="barang">
-				        		<?php foreach ($item as $i): ?>
-				        			<option value="<?php echo $i->namaBarang?>"><?php echo $i->IDbarang ?></option>
-				        		<?php endforeach ?>	
-							</datalist>
+					  	<div class="form-row">
+					  		<div class="form-group col-md-7">
+						    	<label for="lihatnamaBarang">Nama Barang</label>
+						    	<input type="text" class="form-control" id="lihatnamaBarang" name="lihatnamaBarang" list="barang" readonly />
+								<datalist id="barang">
+					        		<?php foreach ($namaBarang as $n): ?>
+					        			<option value="<?php echo $n->namaBarang?>"><?php echo $n->namaBarang ?></option>
+					        		<?php endforeach ?>
+								</datalist>
+						  	</div>
+						  	<div class="form-group col-md-5">
+						    	<label for="lihatharga">Harga</label>
+						    	<input type="number" class="form-control" id="lihatharga" name="lihathargBarang" placeholder="Rp." readonly />
+						    	<div class="invalid-feedback">Anda harus memasukan harga barang</div>
+						  	</div>
 					  	</div>
 					  	<div class="form-row">
 					  		<div class="form-group col-md-6">
@@ -338,7 +373,7 @@
 					    	<div class="form-group col-md-4">
 					      		<label for="lihatbulan">Bulan</label>
 					      		<select id="lihatbulan" name="lihatbulan" class="form-control" readonly>
-					        		<option selected disabled>Pilih</option>
+					        		<option selected disabled value="-">-</option>
 					        		<option value="1">Januari</option>
 					        		<option value="2">Februari</option>
 					        		<option value="3">Maret</option>
@@ -419,6 +454,7 @@
                 $('[name="editkodeBarang"]').val(data[0].kodeBarang);
                 $('[name="editjenisAset"]').val(data[0].jenisAset);
                 $('[name="editnamaBarang"]').val(data[0].namaBarang);
+                $('[name="edithargBarang"]').val(data[0].harga);
                 $('[name="editmerk"]').val(data[0].merk);
                 $('[name="editnoMesin"]').val(data[0].noMesin);
                 $('[name="editlokasi"]').val(data[0].lokasi);
@@ -426,13 +462,15 @@
                 $('[name="editbulan"]').val(data[0].bulan);
                 $('[name="edittahun"]').val(data[0].tahun);
                 $('[name="namaFile"]').val(data[0].fileImage);
-                if (data[0].fileImage != null) {
+                if (data[0].fileImage != null && data[0].fileImage != "") {
                 	$('#editBlah')
 	                	.css('background-image', 'url(<?php echo base_url('assets/img/inventaris/') ?>' + data[0].fileImage + ')')
 	                    .css('background-size', 'contain, cover')
 	                    .css('background-repeat', 'no-repeat')
-	                    .width(150)
 	                    .height(200);
+                }else if(data[0].fileImage == null || data[0].fileImage == ""){
+                	$('#editBlah')
+	                    .height(10);
                 }
 
                 $('#editModalCenter').modal('show');
@@ -457,19 +495,22 @@
                 $('[name="lihatkodeBarang"]').val(data[0].kodeBarang);
                 $('[name="lihatjenisAset"]').val(data[0].jenisAset);
                 $('[name="lihatnamaBarang"]').val(data[0].namaBarang);
+                $('[name="lihathargBarang"]').val(data[0].harga);
                 $('[name="lihatmerk"]').val(data[0].merk);
                 $('[name="lihatnoMesin"]').val(data[0].noMesin);
                 $('[name="lihatlokasi"]').val(data[0].lokasi);
                 $('[name="lihatbahan"]').val(data[0].bahan);
                 $('[name="lihatbulan"]').val(data[0].bulan);
                 $('[name="lihattahun"]').val(data[0].tahun);
-                if (data[0].fileImage != null) {
+                if (data[0].fileImage != null && data[0].fileImage != "") {
                 	$('#foto')
 	                	.css('background-image', 'url(<?php echo base_url('assets/img/inventaris/') ?>' + data[0].fileImage + ')')
 	                    .css('background-size', 'contain, cover')
 	                    .css('background-repeat', 'no-repeat')
-	                    .width(150)
 	                    .height(200);
+                }else if(data[0].fileImage == null || data[0].fileImage == ""){
+                	$('#foto')
+	                    .height(10);
                 }
 
                 $('#lihatModalCenter').modal('show');
@@ -520,7 +561,6 @@
 </script>
 
 <script>
-
 	$(document).ready(function(){
 		if(!$("table#inventaris_table tr td").hasClass('null')) {
 			var preRegTable = $('#inventaris_table').DataTable({
@@ -553,13 +593,17 @@
 		            {
 		                "targets": [ 10 ],
 		                "visible": false
+		            },
+		            {
+		                "targets": [ 11 ],
+		                "visible": false
 		            }
 		        ],
 				buttons: [
 		            {
 		                extend: 'excelHtml5',
 		                exportOptions: {
-		                    columns: [0,1,2,3,5,4,6,7,8,9,10]
+		                    columns: [0,1,2,3,5,4,6,7,8,9,10,11]
 		                }
 		            }
 		        ]

@@ -12,6 +12,7 @@ class Home extends CI_Controller {
 		// 	$_SESSION['jadwal_err'] = true;
 		// 	redirect('/');
 		// }
+		
 	}
 
 	public function index()
@@ -42,7 +43,7 @@ class Home extends CI_Controller {
             'isi' => 'pages/inventaris',
             'nav_active' => '',
             'inventaris' => $this->home_model->get_inventaris(),
-            'item' => $this->home_model->get_barang()
+            
         );
         $this->load->view('layout/wrapper',$data);
 	}
@@ -63,6 +64,7 @@ class Home extends CI_Controller {
 		$kodeBarang = $this->input->post('kodeBarang');
 		$jenisAset = $this->input->post('jenisAset');
 		$namaBarang = $this->input->post('IDbarang');
+		$harga = $this->input->post('hargaBarang');
 		$merk = $this->input->post('merk');
 		$noMesin = $this->input->post('noMesin');
 		$lokasi = $this->input->post('lokasi');
@@ -70,15 +72,6 @@ class Home extends CI_Controller {
 		$bulan = $this->input->post('bulan');
 		$tahun = $this->input->post('tahun');
 		$fileImage = $this->input->post('fileImage');
-
-		// check if barang is not exist on table barang
-		$check = $this->home_model->get_barang_where(array('namaBarang'=>$namaBarang));
-		if ($check == false) {
-			$this->db->insert('barang', array('namaBarang' => $namaBarang));
-			$IDbarang = $this->home_model->get_barang_where(array('namaBarang'=>$namaBarang))['IDbarang'];
-		} else {
-			$IDbarang = $check['IDbarang'];
-		}
 		
 		$fileImageName = [null, null];
 
@@ -93,10 +86,8 @@ class Home extends CI_Controller {
 
 			if ( ! $this->upload->do_upload('fileImage')){
 				$error = array('error' => $this->upload->display_errors());
-				$_SESSION['error'] = 'Gagal upload foto : '.$error['error'];
 			}else{
 				$data = array('upload_data' => $this->upload->data());
-				$_SESSION['success'] = 'Pengumuman berhasil di-upload :)';
 				$fileImageName = ['success', $this->upload->data()['file_name']];
 			}
 		}else{
@@ -107,7 +98,8 @@ class Home extends CI_Controller {
 		$data = array(
 			'kodeBarang' => $kodeBarang,
 			'jenisAset' => $jenisAset,
-			'IDbarang' => $IDbarang,
+			'namaBarang' => $namaBarang,
+			'harga' => $harga,
 			'merk' => $merk,
 			'noMesin' => $noMesin,
 			'lokasi' => $lokasi,
@@ -139,21 +131,13 @@ class Home extends CI_Controller {
 		$jenisAset = $this->input->post('editjenisAset');
 		$namaBarang = $this->input->post('editnamaBarang');
 		$merk = $this->input->post('editmerk');
+		$harga = $this->input->post('edithargBarang');
 		$noMesin = $this->input->post('editnoMesin');
 		$lokasi = $this->input->post('editlokasi');
 		$bahan = $this->input->post('editbahan');
 		$bulan = $this->input->post('editbulan');
 		$tahun = $this->input->post('edittahun');
 		$fileImage = $this->input->post('namaFile');
-
-		// check if barang is not exist on table barang
-		$check = $this->home_model->get_barang_where(array('namaBarang'=>$namaBarang));
-		if ($check == false) {
-			$this->db->insert('barang', array('namaBarang' => $namaBarang));
-			$IDbarang = $this->home_model->get_barang_where(array('namaBarang'=>$namaBarang))['IDbarang'];
-		} else {
-			$IDbarang = $check['IDbarang'];
-		}
 		
 		$fileImageName = array(null, null);
 
@@ -179,8 +163,9 @@ class Home extends CI_Controller {
 		$data = array(
 			'kodeBarang' => $kodeBarang,
 			'jenisAset' => $jenisAset,
-			'IDbarang' => $IDbarang,
+			'namaBarang' => $namaBarang,
 			'merk' => $merk,
+			'harga' => $harga,
 			'noMesin' => $noMesin,
 			'lokasi' => $lokasi,
 			'bahan' => $bahan,
@@ -195,6 +180,23 @@ class Home extends CI_Controller {
 
 		$_SESSION['success'] = 'Inventaris berhasil diupdate :)';
 		redirect(base_url().'/home/inventaris');
+	}
+
+	public function updatebulan()
+	{
+		$inventaris = $this->db->get_where('inventaris', array('bulan'=>null))->result();
+
+		foreach ($inventaris as $i) {
+			$b_section = explode('/', $i->noInventaris)[2];
+			$bulan = $this->romawi_to_bulan($b_section);
+			$data = array(
+				'bulan' => $bulan
+			);
+			$this->db->set($data);
+			$this->db->where('IDinventaris', $i->IDinventaris);
+			$this->db->update('inventaris');
+		}
+		redirect(base_url().'home/inventaris');
 	}
 
 	public function hapus_inventaris($id)
@@ -254,7 +256,6 @@ class Home extends CI_Controller {
                 }
             }
         }
-
 	}
 
 	function logout()
@@ -273,5 +274,11 @@ class Home extends CI_Controller {
     {
     	$romawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
     	return $romawi[$val+1];
+    }
+
+    public function romawi_to_bulan($val)
+    {
+    	$romawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+    	return array_search($val, $romawi)+1;
     }
 }

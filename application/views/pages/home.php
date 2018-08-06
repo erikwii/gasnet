@@ -1,5 +1,10 @@
 <div class="container app login">
 	<div class="row my-3">
+		<div class="col-lg-4 offset-lg-4">
+			<img src="<?php echo base_url() ?>assets/img/gasnet.png" class="w-100">
+		</div>
+	</div>
+	<div class="row my-3">
         <div class="col-12 col-lg-4 offset-lg-4 col-md-4">
         	<?php if (isset($_SESSION['login_error'])): ?>
         		<div class="alert alert-danger alert-dismissible fade show" role="alert">

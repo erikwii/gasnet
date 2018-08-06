@@ -38,10 +38,8 @@ class Home_model extends CI_Model{
 	public function get_inventaris($IDinventaris=null)
 	{
 		if (isset($IDinventaris)) {
-			$this->db->join('barang', 'inventaris.IDbarang = barang.IDbarang');
 			return $this->db->get_where('inventaris', array('IDinventaris'=>$IDinventaris))->result();
 		}else{
-			$this->db->join('barang', 'inventaris.IDbarang = barang.IDbarang');
 			return $this->db->get('inventaris')->result();
 		}
 	}
@@ -51,23 +49,12 @@ class Home_model extends CI_Model{
 		return $this->db->get_where('inventaris', $where)->row_array();
 	}
 
-	public function get_barang($IDbarang=null)
+	public function get_inventaris_column($select)
 	{
-		if (isset($IDbarang)) {
-			return $this->db->get_where('barang', array('IDbarang'=>$IDbarang))->result();
-		}else{
-			return $this->db->get('barang')->result();
-		}
-	}
+		$this->db->distinct();
+		$this->db->select($select);
+		return $this->db->get('inventaris')->result();
 
-	public function get_barang_where($where)
-	{
-		$query = $this->db->get_where('barang', $where);
-		if ($query->num_rows() > 0) {
-			return $query->row_array();
-		} else {
-			return false;
-		}
 	}
 	
 	public function change_dateToMonthIndo($tanggal){
