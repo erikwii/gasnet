@@ -182,23 +182,6 @@ class Home extends CI_Controller {
 		redirect(base_url().'/home/inventaris');
 	}
 
-	public function updatebulan()
-	{
-		$inventaris = $this->db->get_where('inventaris', array('bulan'=>null))->result();
-
-		foreach ($inventaris as $i) {
-			$b_section = explode('/', $i->noInventaris)[2];
-			$bulan = $this->romawi_to_bulan($b_section);
-			$data = array(
-				'bulan' => $bulan
-			);
-			$this->db->set($data);
-			$this->db->where('IDinventaris', $i->IDinventaris);
-			$this->db->update('inventaris');
-		}
-		redirect(base_url().'home/inventaris');
-	}
-
 	public function hapus_inventaris($id)
 	{	
 		$file = $this->home_model->get_inventaris($id)['fileImage'];
@@ -270,6 +253,23 @@ class Home extends CI_Controller {
        redirect(base_url());
     }
 
+    public function updatebulan()
+	{
+		$inventaris = $this->db->get('inventaris')->result();
+
+		foreach ($inventaris as $i) {
+			$b_section = explode('/', $i->noInventaris)[2];
+			$bulan = $this->romawi_to_bulan($b_section);
+			$data = array(
+				'bulan' => $bulan
+			);
+			$this->db->set($data);
+			$this->db->where('IDinventaris', $i->IDinventaris);
+			$this->db->update('inventaris');
+		}
+		redirect(base_url().'home/inventaris');
+	}
+
     public function bulan_to_romawi($val)
     {
     	$romawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
@@ -279,6 +279,6 @@ class Home extends CI_Controller {
     public function romawi_to_bulan($val)
     {
     	$romawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
-    	return array_search($val, $romawi)+1;
+    	return (array_search($val, $romawi)+1);
     }
 }
