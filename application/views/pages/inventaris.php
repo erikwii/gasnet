@@ -102,7 +102,7 @@
 					      		<datalist id="aset">
 					      			<option value="Peralatan Penunjang Operasi">Peralatan Penunjang Operasi</option>
 					      			<option value="Komputer">Komputer</option>
-					      			<option value="Bahan Logam">Bahan Kayu</option>
+					      			<option value="Bahan Kayu">Bahan Kayu</option>
 					      			<option value="Bahan Logam">Bahan Logam</option>
 					      			<option value="Alat-alat Lainnya">Alat-Alat Lainnya</option>
 					      		</datalist>
@@ -218,7 +218,7 @@
 					      		<datalist id="editaset">
 					      			<option value="Peralatan Penunjang Operasi">Peralatan Penunjang Operasi</option>
 					      			<option value="Komputer">Komputer</option>
-					      			<option value="Bahan Logam">Bahan Kayu</option>
+					      			<option value="Bahan Kayu">Bahan Kayu</option>
 					      			<option value="Bahan Logam">Bahan Logam</option>
 					      			<option value="Alat-alat Lainnya">Alat-Alat Lainnya</option>
 					      		</datalist>
@@ -329,7 +329,7 @@
 					      		<datalist id="lihataset">
 					      			<option value="Peralatan Penunjang Operasi">Peralatan Penunjang Operasi</option>
 					      			<option value="Komputer">Komputer</option>
-					      			<option value="Bahan Logam">Bahan Kayu</option>
+					      			<option value="Bahan Kayu">Bahan Kayu</option>
 					      			<option value="Bahan Logam">Bahan Logam</option>
 					      			<option value="Alat-alat Lainnya">Alat-Alat Lainnya</option>
 					      		</datalist>

@@ -56,6 +56,11 @@ class Home_model extends CI_Model{
 		return $this->db->get('inventaris')->result();
 
 	}
+
+	public function get_urutan_barang($kodeBarang)
+	{
+		return $this->db->get_where('inventaris',array('kodeBarang'=>$kodeBarang))->num_rows();
+	}
 	
 	public function change_dateToMonthIndo($tanggal){
 		$arrTgl = explode("-", $tanggal);

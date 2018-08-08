@@ -110,13 +110,20 @@ class Home extends CI_Controller {
 		);
 		$this->db->insert('inventaris',$data);
 
+		$noUrut = $this->home_model->get_urutan_barang($kodeBarang) + 1;
+
 		$IDinventaris = $this->home_model->get_inventaris_where($data)['IDinventaris'];
 
-		$this->db->set('noInventaris', $kodeBarang.'/'.$IDinventaris.'/'.$this->bulan_to_romawi($bulan).'/'.$tahun);
+		$this->db->set('noInventaris', $kodeBarang.'/'.$noUrut.'/'.$this->bulan_to_romawi($bulan).'/'.$tahun);
 		$this->db->where($data);
 		$this->db->update('inventaris');
 		$_SESSION['success'] = 'Inventaris berhasil ditambahkan :)';
 		redirect(base_url().'/home/inventaris');
+	}
+
+	public function cekurutan($kodeBarang)
+	{
+		echo $this->home_model->get_urutan_barang($kodeBarang) + 1;
 	}
 
 	public function edit_inventaris()
@@ -160,6 +167,10 @@ class Home extends CI_Controller {
 			$fileImageName = array('success', $fileImage);
 		}
 
+		$noInventaris = $this->home_model->get_inventaris_where(array('IDinventaris'=>$IDinventaris))['noInventaris'];
+		$noInventaris = explode('/', $noInventaris);
+		$noUrut = $noInventaris[1];
+
 		$data = array(
 			'kodeBarang' => $kodeBarang,
 			'jenisAset' => $jenisAset,
@@ -171,7 +182,7 @@ class Home extends CI_Controller {
 			'bahan' => $bahan,
 			'bulan' => $bulan,
 			'tahun' => $tahun,
-			'noInventaris' => $kodeBarang.'/'.$IDinventaris.'/'.$this->bulan_to_romawi($bulan).'/'.$tahun,
+			'noInventaris' => $kodeBarang.'/'.$noUrut.'/'.$this->bulan_to_romawi($bulan).'/'.$tahun,
 			'fileImage' => $fileImageName[1]
 		);
 		$this->db->set($data);
@@ -272,8 +283,8 @@ class Home extends CI_Controller {
 
     public function bulan_to_romawi($val)
     {
-    	$romawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
-    	return $romawi[$val+1];
+    	$romawi = ['-','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+    	return $romawi[$val];
     }
 
     public function romawi_to_bulan($val)
