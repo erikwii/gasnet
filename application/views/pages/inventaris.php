@@ -182,7 +182,7 @@
 							  	</div>
 							</div>
 					  	</div>
-					  	<button type="submit" class="btn btn-primary">Tambah</button>
+					  	<button type="submit" class="btn btn-lg btn-block btn-primary">Tambah</button>
 					</form>
 	      		</div>
 	    	</div>
@@ -298,7 +298,7 @@
 							  	</div>
 							</div>
 					  	</div>
-					  	<button type="submit" class="btn btn-primary">Edit</button>
+					  	<button type="submit" class="btn btn-lg btn-block btn-primary">Edit</button>
 					</form>
 	      		</div>
 	    	</div>
