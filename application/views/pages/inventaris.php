@@ -64,9 +64,9 @@
 					      <td><?php echo $barang->tahun ?></td>
 					      <td>
 					      	<div class="btn-group">
-					      		<button class="btn btn-info" onclick="lihat_inventaris(<?php echo $barang->IDinventaris ?>)">Lihat Selengkapnya</button>
-					      		<button class="btn btn-warning" onclick="edit_inventaris(<?php echo $barang->IDinventaris ?>)">Edit</button>
-					      		<button class="btn btn-danger" onclick='hapus_inventaris(<?php echo $barang->IDinventaris ?>)'>Hapus</button>
+					      		<button class="btn btn-sm btn-info" onclick="lihat_inventaris(<?php echo $barang->IDinventaris ?>)">Lihat Selengkapnya</button>
+					      		<button class="btn btn-sm btn-warning" onclick="edit_inventaris(<?php echo $barang->IDinventaris ?>)">Edit</button>
+					      		<button class="btn btn-sm btn-danger" onclick='hapus_inventaris(<?php echo $barang->IDinventaris ?>)'>Hapus</button>
 					      	</div>
 					      </td>
 					    </tr>
