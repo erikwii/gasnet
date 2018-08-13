@@ -332,6 +332,7 @@ class Home extends CI_Controller {
 	        $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
 	        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 		}
+		$_SESSION['success'] = 'QR code berhasil ditambahkan :)';
 		redirect(base_url().'home/inventaris');
 	}
 
