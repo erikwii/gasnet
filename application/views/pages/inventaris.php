@@ -19,7 +19,7 @@
 				</div>
 				<?php unset($_SESSION['success']) ?>
         	<?php endif ?>
-        	<button class="btn btn-primary float-right my-2" data-toggle="modal" data-target="#exampleModalCenter">Tambah</button>
+        	<button class="btn btn-primary float-right my-2" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-plus-square"></i> Tambah</button>
         	<!-- <div class="float-right">
         		<form>
         			<div class="form-group">
@@ -58,7 +58,7 @@
 					      		$no = explode("/", $barang->noInventaris);
 					      		$no = $no[0].'-'.$no[1].'-'.$no[2].'-'.$no[3].'.png';
 					       ?>
-					      <td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>" data-toggle="tooltip" data-placement="top" data-html="true" title="Unduh QRcode <i class='fa fa-qrcode'></i>"><?php echo $barang->noInventaris ?></a></td>
+					      <td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>" data-toggle="tooltip" data-placement="top" data-html="true" title="Unduh QRcode <i class='fa fa-qrcode	'></i>"><?php echo $barang->noInventaris ?></a></td>
 					      <td><?php echo $barang->harga ?></td>
 					      <td><?php echo $barang->merk ?></td>
 					      <td><?php echo $barang->noMesin ?></td>
@@ -69,8 +69,8 @@
 					      <td>
 					      	<div class="btn-group">
 					      		<button class="btn btn-sm btn-info" onclick="lihat_inventaris(<?php echo $barang->IDinventaris ?>)">Lihat Selengkapnya</button>
-					      		<button class="btn btn-sm btn-warning" onclick="edit_inventaris(<?php echo $barang->IDinventaris ?>)">Edit</button>
-					      		<button class="btn btn-sm btn-danger" onclick='hapus_inventaris(<?php echo $barang->IDinventaris ?>)'>Hapus</button>
+					      		<button class="btn btn-sm btn-warning" onclick="edit_inventaris(<?php echo $barang->IDinventaris ?>)"><i class="fa fa-edit"></i> Edit</button>
+					      		<button class="btn btn-sm btn-danger" onclick='hapus_inventaris(<?php echo $barang->IDinventaris ?>)'><i class="fa fa-trash"></i> Hapus</button>
 					      	</div>
 					      </td>
 					    </tr>
@@ -186,7 +186,7 @@
 							  	</div>
 							</div>
 					  	</div>
-					  	<button type="submit" class="btn btn-lg btn-block btn-primary">Tambah</button>
+					  	<button type="submit" class="btn btn-lg btn-block btn-primary"><i class="fa fa-plus-square"></i> Tambah</button>
 					</form>
 	      		</div>
 	    	</div>
@@ -302,7 +302,7 @@
 							  	</div>
 							</div>
 					  	</div>
-					  	<button type="submit" class="btn btn-lg btn-block btn-primary">Edit</button>
+					  	<button type="submit" class="btn btn-lg btn-block btn-primary"><i class="fa fa-edit"></i> Edit</button>
 					</form>
 	      		</div>
 	    	</div>
