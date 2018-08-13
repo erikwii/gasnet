@@ -110,13 +110,35 @@ class Home extends CI_Controller {
 		);
 		$this->db->insert('inventaris',$data);
 
-		$noUrut = $this->home_model->get_urutan_barang($kodeBarang) + 1;
+		$noUrut = $this->home_model->get_urutan_barang($kodeBarang);
 
 		$IDinventaris = $this->home_model->get_inventaris_where($data)['IDinventaris'];
 
 		$this->db->set('noInventaris', $kodeBarang.'/'.$noUrut.'/'.$this->bulan_to_romawi($bulan).'/'.$tahun);
 		$this->db->where($data);
 		$this->db->update('inventaris');
+
+		// Pembuatan QRcode
+		$this->load->library('ciqrcode'); //pemanggilan library QR CODE
+ 
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']     = './assets/'; //string, the default is application/cache/
+        $config['errorlog']     = './assets/'; //string, the default is application/logs/
+        $config['imagedir']     = './assets/img/'; //direktori penyimpanan qr code
+        $config['quality']      = true; //boolean, the default is true
+        $config['size']         = '1024'; //interger, the default is 1024
+        // $config['black']        = array(224,255,255); // array, default is array(255,255,255)
+        // $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+ 
+        $image_name=$kodeBarang.'-'.$noUrut.'-'.$this->bulan_to_romawi($bulan).'-'.$tahun.'.png'; //buat name dari qr code sesuai dengan nim
+ 
+        $params['data'] = $kodeBarang.'/'.$noUrut.'/'.$this->bulan_to_romawi($bulan).'/'.$tahun; //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
 		$_SESSION['success'] = 'Inventaris berhasil ditambahkan :)';
 		redirect(base_url().'/home/inventaris');
 	}
@@ -277,6 +299,38 @@ class Home extends CI_Controller {
 			$this->db->set($data);
 			$this->db->where('IDinventaris', $i->IDinventaris);
 			$this->db->update('inventaris');
+		}
+		redirect(base_url().'home/inventaris');
+	}
+
+	public function addqr()
+	{
+		$inventaris = $this->db->get('inventaris')->result();
+
+		foreach ($inventaris as $in) {
+			$no = explode("/", $in->noInventaris);
+			$no = $no[0].'-'.$no[1].'-'.$no[2].'-'.$no[3].'.png';
+
+			// Pembuatan QRcode
+			$this->load->library('ciqrcode'); //pemanggilan library QR CODE
+	 
+	        $config['cacheable']    = true; //boolean, the default is true
+	        $config['cachedir']     = './assets/'; //string, the default is application/cache/
+	        $config['errorlog']     = './assets/'; //string, the default is application/logs/
+	        $config['imagedir']     = './assets/img/'; //direktori penyimpanan qr code
+	        $config['quality']      = true; //boolean, the default is true
+	        $config['size']         = '1024'; //interger, the default is 1024
+	        // $config['black']        = array(224,255,255); // array, default is array(255,255,255)
+	        // $config['white']        = array(70,130,180); // array, default is array(0,0,0)
+	        $this->ciqrcode->initialize($config);
+	 
+	        $image_name=$no; //buat name dari qr code sesuai dengan nim
+	 
+	        $params['data'] = $in->noInventaris; //data yang akan di jadikan QR CODE
+	        $params['level'] = 'H'; //H=High
+	        $params['size'] = 10;
+	        $params['savename'] = FCPATH.$config['imagedir'].$image_name; //simpan image QR CODE ke folder assets/images/
+	        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 		}
 		redirect(base_url().'home/inventaris');
 	}

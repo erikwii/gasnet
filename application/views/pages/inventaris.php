@@ -54,7 +54,11 @@
 					      <td><?php echo $barang->kodeBarang ?></td>
 					      <td><?php echo $barang->jenisAset ?></td>
 					      <td><?php echo $barang->namaBarang ?></td>
-					      <td class="text-primary"><?php echo $barang->noInventaris ?></td>
+					      <?php 
+					      		$no = explode("/", $barang->noInventaris);
+					      		$no = $no[0].'-'.$no[1].'-'.$no[2].'-'.$no[3].'.png';
+					       ?>
+					      <td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>"><?php echo $barang->noInventaris ?></a></td>
 					      <td><?php echo $barang->harga ?></td>
 					      <td><?php echo $barang->merk ?></td>
 					      <td><?php echo $barang->noMesin ?></td>
