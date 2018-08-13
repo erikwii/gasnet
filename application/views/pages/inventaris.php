@@ -28,7 +28,7 @@
         		</form>
         	</div> -->
         	<div class="table-responsive">
-        		<table class="table table-striped w-100" id="inventaris_table">
+        		<table class="table table-responsive table-striped w-100" id="inventaris_table">
 				  <thead>
 				    <tr>
 				      <th scope="col">No</th>
@@ -58,7 +58,7 @@
 					      		$no = explode("/", $barang->noInventaris);
 					      		$no = $no[0].'-'.$no[1].'-'.$no[2].'-'.$no[3].'.png';
 					       ?>
-					      <td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>"><?php echo $barang->noInventaris ?></a></td>
+					      <td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>" data-toggle="tooltip" data-placement="top" title="Unduh QRcode"><?php echo $barang->noInventaris ?></a></td>
 					      <td><?php echo $barang->harga ?></td>
 					      <td><?php echo $barang->merk ?></td>
 					      <td><?php echo $barang->noMesin ?></td>
@@ -444,6 +444,10 @@
         }
     }
 
+	$(function () {
+		$('[data-toggle="tooltip"]').tooltip()
+	})
+
     function edit_inventaris(id){
         $('#form')[0].reset();
 
@@ -539,7 +543,7 @@
 		  	if (willDelete) {
 		    	window.location = '<?php echo base_url() ?>home/hapus_inventaris/'+id;
 		  	} else {
-		    	swal("Your imaginary file is safe!");
+		    	swal("Data Anda berhasil diamankan!");
 		  	}
 		});
     }
