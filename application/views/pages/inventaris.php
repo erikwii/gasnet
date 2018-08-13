@@ -58,7 +58,7 @@
 					      		$no = explode("/", $barang->noInventaris);
 					      		$no = $no[0].'-'.$no[1].'-'.$no[2].'-'.$no[3].'.png';
 					       ?>
-					      <td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>" data-toggle="tooltip" data-placement="top" title="Unduh QRcode"><?php echo $barang->noInventaris ?></a></td>
+					      <td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>" data-toggle="tooltip" data-placement="top" data-html="true" title="Unduh QRcode <i class='fa fa-qrcode'></i>"><?php echo $barang->noInventaris ?></a></td>
 					      <td><?php echo $barang->harga ?></td>
 					      <td><?php echo $barang->merk ?></td>
 					      <td><?php echo $barang->noMesin ?></td>
