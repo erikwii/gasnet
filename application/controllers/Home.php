@@ -6,13 +6,6 @@ class Home extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('home_model');
-		
-		// if(!isset($_SESSION["level"]) || $_SESSION["level"] != 1){
-		// 	$_SESSION['deletex'] = "Anda tidak bisa mengakses halaman Admin...";
-		// 	$_SESSION['jadwal_err'] = true;
-		// 	redirect('/');
-		// }
-		
 	}
 
 	public function index()

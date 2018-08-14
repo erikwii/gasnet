@@ -20,59 +20,52 @@
 				<?php unset($_SESSION['success']) ?>
         	<?php endif ?>
         	<button class="btn btn-primary float-right my-2" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-plus-square"></i> Tambah</button>
-        	<!-- <div class="float-right">
-        		<form>
-        			<div class="form-group">
-	        			<input type="text" class="form-control" id="inventarisSearch" placeholder="Search inventaris">
-	        		</div>
-        		</form>
-        	</div> -->
         	<div class="table-responsive">
         		<table class="table table-responsive table-striped w-100" id="inventaris_table">
-				  <thead>
-				    <tr>
-				      <th scope="col">No</th>
-				      <th scope="col">Kode Barang</th>
-				      <th scope="col">Jenis Aset</th>
-				      <th scope="col">Nama Barang</th>
-				      <th scope="col">No. Inventaris</th>
-				      <th scope="col">Harga</th>
-				      <th scope="col">Merk/Tipe</th>
-				      <th scope="col">No. Mesin/Serial Number</th>
-				      <th scope="col">Lokasi</th>
-				      <th scope="col">Bahan</th>
-				      <th scope="col">Bulan</th>
-				      <th scope="col">Tahun</th>
-				      <th scope="col">Action</th>
-				    </tr>
-				  </thead>
-				  <tbody>
+				  	<thead>
+				    	<tr>
+				      		<th scope="col">No</th>
+				      		<th scope="col">Kode Barang</th>
+				      		<th scope="col">Jenis Aset</th>
+				      		<th scope="col">Nama Barang</th>
+				      		<th scope="col">No. Inventaris</th>
+				      		<th scope="col">Harga</th>
+				      		<th scope="col">Merk/Tipe</th>
+				      		<th scope="col">No. Mesin/Serial Number</th>
+				      		<th scope="col">Lokasi</th>
+				      		<th scope="col">Bahan</th>
+				      		<th scope="col">Bulan</th>
+				      		<th scope="col">Tahun</th>
+				      		<th scope="col">Action</th>
+				    	</tr>
+				  	</thead>
+				  	<tbody>
 				  	<?php $i=1; ?>
 				  	<?php foreach ($inventaris as $barang): ?>
 				  		<tr>
-					      <th scope="row"><?php echo $i ?></th>
-					      <td><?php echo $barang->kodeBarang ?></td>
-					      <td><?php echo $barang->jenisAset ?></td>
-					      <td><?php echo $barang->namaBarang ?></td>
-					      <?php 
+					      	<th scope="row"><?php echo $i ?></th>
+					      	<td><?php echo $barang->kodeBarang ?></td>
+					      	<td><?php echo $barang->jenisAset ?></td>
+					      	<td><?php echo $barang->namaBarang ?></td>
+					      	<?php 
 					      		$no = explode("/", $barang->noInventaris);
 					      		$no = $no[0].'-'.$no[1].'-'.$no[2].'-'.$no[3].'.png';
-					       ?>
-					      <td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>" data-toggle="tooltip" data-placement="top" data-html="true" title="Unduh QRcode <i class='fa fa-qrcode	'></i>"><?php echo $barang->noInventaris ?></a></td>
-					      <td><?php echo $barang->harga ?></td>
-					      <td><?php echo $barang->merk ?></td>
-					      <td><?php echo $barang->noMesin ?></td>
-					      <td><?php echo $barang->lokasi ?></td>
-					      <td><?php echo $barang->bahan ?></td>
-					      <td><?php echo $barang->bulan ?></td>
-					      <td><?php echo $barang->tahun ?></td>
-					      <td>
-					      	<div class="btn-group">
-					      		<button class="btn btn-sm btn-info" onclick="lihat_inventaris(<?php echo $barang->IDinventaris ?>)">Lihat Selengkapnya</button>
-					      		<button class="btn btn-sm btn-warning" onclick="edit_inventaris(<?php echo $barang->IDinventaris ?>)"><i class="fa fa-edit"></i> Edit</button>
-					      		<button class="btn btn-sm btn-danger" onclick='hapus_inventaris(<?php echo $barang->IDinventaris ?>)'><i class="fa fa-trash"></i> Hapus</button>
-					      	</div>
-					      </td>
+					       	?>
+					      	<td class="text-primary"><a href="<?php echo base_url('assets/img/').$no ?>" target="_blank" data-toggle="tooltip" data-placement="top" data-html="true" title="Unduh QRcode <i class='fa fa-qrcode	'></i>"><?php echo $barang->noInventaris ?></a></td>
+					      	<td><?php echo $barang->harga ?></td>
+					      	<td><?php echo $barang->merk ?></td>
+					      	<td><?php echo $barang->noMesin ?></td>
+					      	<td><?php echo $barang->lokasi ?></td>
+					      	<td><?php echo $barang->bahan ?></td>
+					      	<td><?php echo $barang->bulan ?></td>
+					      	<td><?php echo $barang->tahun ?></td>
+					      	<td>
+					      		<div class="btn-group">
+					      			<button class="btn btn-sm btn-info" onclick="lihat_inventaris(<?php echo $barang->IDinventaris ?>)">Lihat Selengkapnya</button>
+					      			<button class="btn btn-sm btn-warning" onclick="edit_inventaris(<?php echo $barang->IDinventaris ?>)"><i class="fa fa-edit"></i> Edit</button>
+					      			<button class="btn btn-sm btn-danger" onclick='hapus_inventaris(<?php echo $barang->IDinventaris ?>)'><i class="fa fa-trash"></i> Hapus</button>
+					      		</div>
+					      	</td>
 					    </tr>
 					    <?php $i++ ?>
 				  	<?php endforeach ?>
