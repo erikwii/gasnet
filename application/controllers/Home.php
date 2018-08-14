@@ -340,4 +340,9 @@ class Home extends CI_Controller {
     	$romawi = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
     	return (array_search($val, $romawi)+1);
     }
+
+    public function cobahash($value)
+	{
+		echo password_hash($value, PASSWORD_DEFAULT);
+	}
 }

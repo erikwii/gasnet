@@ -1,0 +1,11 @@
+{
+  "name": "HBB Inventaris Gasnet",
+  "short_name": "Gasnet HBB",
+  "theme_color": "#2196f3",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "Scope": "/gasnet",
+  "start_url": "/gasnet/",
+  "icons": null,
+  "splash_pages": null
+}

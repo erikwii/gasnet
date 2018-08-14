@@ -90,18 +90,23 @@
 					  	<div class="form-row">
 					    	<div class="form-group col-md-4">
 					      		<label for="kodeBarang">Kode Barang</label>
-					      		<input type="text" class="form-control" id="kodeBarang" name="kodeBarang" placeholder="Kode Barang" required>
+					      		<input type="text" class="form-control" id="kodeBarang" name="kodeBarang" placeholder="Kode Barang" list="kode" required>
+					      		<datalist id="kode">
+					      			<?php $kodeBarang = $this->home_model->get_inventaris_column('kodeBarang') ?>
+					      			<?php foreach ($kodeBarang as $k): ?>
+					      				<option value="<?php echo $k->kodeBarang ?>"><?php echo $k->kodeBarang ?></option>
+					      			<?php endforeach ?>
+					      		</datalist>
 					      		<div class="invalid-feedback">Anda harus memasukan kode barang</div>
 					    	</div>
 					    	<div class="form-group col-md-8">
 					      		<label for="jenisAset">Jenis Aset</label>
 					      		<input type="text" id="jenisAset" name="jenisAset" class="form-control" required list="aset">
 					      		<datalist id="aset">
-					      			<option value="Peralatan Penunjang Operasi">Peralatan Penunjang Operasi</option>
-					      			<option value="Komputer">Komputer</option>
-					      			<option value="Bahan Kayu">Bahan Kayu</option>
-					      			<option value="Bahan Logam">Bahan Logam</option>
-					      			<option value="Alat-alat Lainnya">Alat-Alat Lainnya</option>
+					      			<?php $jenisAset = $this->home_model->get_inventaris_column('jenisAset') ?>
+					      			<?php foreach ($jenisAset as $j): ?>
+					      				<option value="<?php echo $j->jenisAset ?>"><?php echo $j->jenisAset ?></option>
+					      			<?php endforeach ?>
 					      		</datalist>
 					      		<div class="invalid-feedback">Anda harus memilih jenis aset</div>
 					    	</div>
@@ -213,11 +218,10 @@
 					      		<label for="editjenisAset">Jenis Aset</label>
 					      		<input type="text" id="editjenisAset" name="editjenisAset" class="form-control" required list="aset">
 					      		<datalist id="editaset">
-					      			<option value="Peralatan Penunjang Operasi">Peralatan Penunjang Operasi</option>
-					      			<option value="Komputer">Komputer</option>
-					      			<option value="Bahan Kayu">Bahan Kayu</option>
-					      			<option value="Bahan Logam">Bahan Logam</option>
-					      			<option value="Alat-alat Lainnya">Alat-Alat Lainnya</option>
+					      			<?php $jenisAset = $this->home_model->get_inventaris_column('jenisAset') ?>
+					      			<?php foreach ($jenisAset as $j): ?>
+					      				<option value="<?php echo $j->jenisAset ?>"><?php echo $j->jenisAset ?></option>
+					      			<?php endforeach ?>
 					      		</datalist>
 					      		<div class="invalid-feedback">Anda harus memilih jenis aset</div>
 					    	</div>
