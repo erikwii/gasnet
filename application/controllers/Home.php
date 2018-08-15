@@ -237,7 +237,7 @@ class Home extends CI_Controller {
 
         if($email == "" || $password == ""){
         	$this->session->set_userdata('login_error', 'Harap masukkan semua input...');
-        	redirect(base_url()."home/");
+        	redirect(base_url());
         }else{
             $login = $this->home_model->get_users($data);
 
@@ -247,10 +247,10 @@ class Home extends CI_Controller {
 
             if( $login == "not_registered"){
             	$this->session->set_userdata('login_error', 'Email belum terdaftar....');
-            	redirect(base_url()."home/");
+            	redirect(base_url());
             }elseif ($status != "aktif"){
             	$this->session->set_userdata('login_error', 'Akun anda sudah di nonaktifkan....');
-            	redirect(base_url()."home/");
+            	redirect(base_url());
             }else{
                 $db_pass = $this->home_model->get_users_pass($email)->password;
 
@@ -261,7 +261,7 @@ class Home extends CI_Controller {
                     redirect(base_url()."home/inventaris");
                 }else{
                 	$this->session->set_userdata('login_error', 'Password yang dimasukkan salah....');
-                	redirect(base_url()."home/");
+                	redirect(base_url());
                 }
             }
         }

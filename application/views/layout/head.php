@@ -43,8 +43,6 @@
 
     <script type="text/javascript" src="<?php echo base_url()?>assets/js/sweetalert.min.js"></script>
 
-    <script type="text/javascript" src="<?php echo base_url()?>assets/js/script.js"></script>
-
     <style>
         #loader {
             border: 16px solid #f3f3f3;
