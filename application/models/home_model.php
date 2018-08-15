@@ -54,7 +54,6 @@ class Home_model extends CI_Model{
 		$this->db->distinct();
 		$this->db->select($select);
 		return $this->db->get('inventaris')->result();
-
 	}
 
 	public function get_urutan_barang($kodeBarang)
